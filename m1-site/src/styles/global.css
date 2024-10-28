@@ -1,5 +1,21 @@
+/* src/styles/globals.css */
+
+/* Importer Tailwind CSS */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Ajoutez vos styles globaux ici */
+/* Ajouter des styles personnalisés */
+body {
+    font-family: 'Inter', sans-serif; /* Exemple de police */
+}
+
+/* Styles pour le breadcrumb */
+.breadcrumb {
+    @apply text-gray-700;
+}
+
+/* Styles pour les boutons */
+.button {
+    @apply bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 transition;
+}
