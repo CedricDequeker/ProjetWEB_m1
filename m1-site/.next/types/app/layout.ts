@@ -1,4 +1,4 @@
-// File: /workspaces/ProjetWEB_m1/m1-site/src/app/layout.tsx
+// File: /workspaces/ProjetWEB_m1/m1-site/src/app/layout.js
 import * as entry from '../../../src/app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
