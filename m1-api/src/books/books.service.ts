@@ -10,7 +10,9 @@ import { CreateBookDto} from './book.dto';
 export class BooksService {
 
   constructor(
-    @InjectRepository(Book) private booksRepository: Repository<Book>,) {}
+    @InjectRepository(Book) 
+    private booksRepository: Repository<Book>,
+  ) {}
 
     create(createBookDto: CreateBookDto) {
     const book = this.booksRepository.create(createBookDto);
