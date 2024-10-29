@@ -2,10 +2,10 @@
 
 "use client";
 
-import Layout from '@/components/Layout';
-import Breadcrumb from '@/components/Breadcrumb';
-import SearchBar from '@/components/SearchBar';
-import BookCard from '@/components/BookCard';
+import Layout from '../../components/Layout';
+import Breadcrumb from '../../components/Breadcrumb';
+import SearchBar from '../../components/SearchBar';
+import BookCard from '../../components/BookCard';
 import { useState } from 'react';
 
 const BooksPage = () => {

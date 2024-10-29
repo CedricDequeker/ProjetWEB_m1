@@ -2,9 +2,9 @@
 
 "use client";
 
-import Layout from '@/components/Layout';
-import Breadcrumb from '@/components/Breadcrumb';
-import SearchBar from '@/components/SearchBar';
+import Layout from '../../components/Layout';
+import Breadcrumb from '../../components/Breadcrumb';
+import SearchBar from '../../components/SearchBar';
 import { useState } from 'react';
 
 const AuthorsPage = () => {
