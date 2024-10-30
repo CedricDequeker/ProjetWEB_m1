@@ -20,5 +20,5 @@ export class AuthorsController {
     @Get(':id')
     findOne(@Param('id') id: string) {
     return this.authorsService.findOne(+id);
-  }
+    }
 }

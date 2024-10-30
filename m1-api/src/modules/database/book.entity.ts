@@ -1,7 +1,8 @@
-////définit les attributs des objets Author et Book, et les relations entre eux
+//définit les attributs des objets Author et Book, et les relations entre eux
 
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, OneToMany, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { Author } from './author.entity';
+import { Review } from './review.entity';
 
 @Entity()
 export class Book {
@@ -19,4 +20,7 @@ export class Book {
 
   @ManyToOne(() => Author, (author) => author.books)
   author: Author;
+
+  @OneToMany(() => Review, (review) => review.book)
+  reviews: Review[];
 }
