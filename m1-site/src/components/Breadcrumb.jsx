@@ -8,7 +8,7 @@ const Breadcrumb = ({ paths }) => {
             <ol className="list-decimal list-inside">
                 {paths.map((path, index) => (
                     <li key={index} className="inline">
-                        <Link href={path.href} className="hover:underline">
+                        <Link href={path.href || '#'} className="hover:underline">
                             {path.label}
                         </Link>
                         {index < paths.length - 1 && ' > '} {/* Affiche " > " entre les éléments */}
