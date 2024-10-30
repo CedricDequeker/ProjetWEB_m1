@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import Layout from "../../components/Layout";
 import BookCard from "../../components/BookCard";
 import SearchBar from "../../components/SearchBar";
@@ -13,10 +13,19 @@ const BooksPage = () => {
     const [books, setBooks] = useState([]);
 
     const fetchBooks = async () => {
-        const response = await fetch('http://127.0.0.1:3001/books');
-        if (!response.ok) throw new Error('Failed to fetch books');
-        return await response.json();
+        try {
+            const response = await fetch('http://127.0.0.1:3001/books');
+            if (!response.ok) throw new Error('Failed to fetch books');
+            const data = await response.json();
+            setBooks(data);
+        } catch (error) {
+            console.error("Erreur lors de la récupération des livres :", error);
+        }
     };
+    // Charger les livres au montage du composant
+    useEffect(() => {
+        fetchBooks();
+    }, []);
 
     const handleAddBook = async (newBookData) => {
         try {

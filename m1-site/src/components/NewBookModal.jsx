@@ -1,11 +1,28 @@
 // src/components/NewBookModal.jsx
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const NewBookModal = ({ onClose, onAddBook }) => {
     const [title, setTitle] = useState('');
     const [publicationDate, setPublicationDate] = useState('');
     const [price, setPrice] = useState('');
-    const [authorId, setAuthorId] = useState(''); // Si vous avez besoin d'un auteur
+    const [authorId, setAuthorId] = useState(''); // État pour l'ID de l'auteur
+    const [authors, setAuthors] = useState([]); // État pour la liste des auteurs
+
+    // Récupérer la liste des auteurs
+    useEffect(() => {
+        const fetchAuthors = async () => {
+            try {
+                const response = await fetch('http://127.0.0.1:3001/authors'); // Vérifiez cette route
+                if (!response.ok) throw new Error('Erreur lors de la récupération des auteurs');
+                const data = await response.json();
+                setAuthors(data);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchAuthors();
+    }, []);
 
     const handleAddBook = async () => {
         const newBookData = {
@@ -30,7 +47,7 @@ const NewBookModal = ({ onClose, onAddBook }) => {
                 onChange={(e) => setTitle(e.target.value)} 
             />
             <input 
-                type="text" 
+                type="date" 
                 placeholder="Date de publication" 
                 value={publicationDate} 
                 onChange={(e) => setPublicationDate(e.target.value)} 
@@ -41,12 +58,17 @@ const NewBookModal = ({ onClose, onAddBook }) => {
                 value={price} 
                 onChange={(e) => setPrice(e.target.value)} 
             />
-            <input 
-                type="number" 
-                placeholder="ID Auteur" 
+            <select 
                 value={authorId} 
-                onChange={(e) => setAuthorId(e.target.value)} 
-            />
+                onChange={(e) => setAuthorId(e.target.value)}
+            >
+                <option value="">Sélectionnez un auteur</option>
+                {authors.map(author => (
+                    <option key={author.id} value={author.id}>
+                        {author.name} {/* Affichez le nom de l'auteur */}
+                    </option>
+                ))}
+            </select>
             <button onClick={handleAddBook}>Ajouter</button>
             <button onClick={onClose}>Fermer</button>
         </div>

@@ -1,4 +1,4 @@
-// File: /home/codespace/ProjetWEB_m1/m1-site/src/app/page.jsx
+// File: /home/codespace/ProjetWEB_m1/ProjetWEB_m1/m1-site/src/app/page.jsx
 import * as entry from '../../../src/app/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
