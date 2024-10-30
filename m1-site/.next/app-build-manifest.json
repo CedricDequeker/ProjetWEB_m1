@@ -18,16 +18,16 @@
       "static/css/app/books/page.css",
       "static/chunks/app/books/page.js"
     ],
+    "/books/[id]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/books/[id]/page.js"
+    ],
     "/authors/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/css/app/authors/page.css",
       "static/chunks/app/authors/page.js"
-    ],
-    "/books/[id]/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/books/[id]/page.js"
     ],
     "/_not-found/page": [
       "static/chunks/webpack.js",

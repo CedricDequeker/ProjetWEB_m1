@@ -1,6 +1,6 @@
 //implemante les routes de l'api
 
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, BadRequestException } from '@nestjs/common';
 import { BooksService } from './books.service';
 import { CreateBookDto} from './book.dto';
 
@@ -32,4 +32,14 @@ export class BooksController {
   remove(@Param('id') id: string) {
     return this.booksService.remove(+id);
   }
+
+  @Get(':id/reviews')
+  async getReviewsForBook(@Param('id') id: string) {
+    const bookId = parseInt(id, 10); // Convertit l'ID en nombre
+    if (isNaN(bookId)) {
+      throw new BadRequestException('Invalid book ID');
+    }
+    return this.booksService.getReviewsForBook(bookId);
+  }
+
 }

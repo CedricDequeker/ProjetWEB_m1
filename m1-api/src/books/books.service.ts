@@ -6,13 +6,16 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Book } from '../modules/database/book.entity';
 import { CreateBookDto} from './book.dto';
 import { Author } from '../modules/database/author.entity';
+import { ReviewsService } from '../reviews/reviews.service';
 
 @Injectable()
 export class BooksService {
 
   constructor(
     @InjectRepository(Book) private booksRepository: Repository<Book>,
-    @InjectRepository(Author) private authorsRepository: Repository<Author>,) {}
+    @InjectRepository(Author) private authorsRepository: Repository<Author>,
+    private reviewsService: ReviewsService,
+    ) {}
 
     async create(createBookDto: CreateBookDto): Promise<Book> {
       const { title, publicationDate, price, authorId } = createBookDto;
@@ -45,5 +48,8 @@ export class BooksService {
 
     remove(id: number) {
     return this.booksRepository.delete(id);
+  }
+  async getReviewsForBook(bookId: number) {
+    return await this.reviewsService.findAllByBook(bookId);
   }
 }
