@@ -63,15 +63,11 @@ const AuthorsPage = () => {
                             id: authors.length + 1,
                             name: e.target.name.value,
                             photo: e.target.photo.value,
-                            bookCount: parseInt(e.target.bookCount.value, 10),
-                            averageRating: parseFloat(e.target.averageRating.value)
                         };
                         handleAddAuthor(newAuthor);
                     }}>
                         <input type="text" name="name" placeholder="Nom" required className="w-full mb-2 p-2 border" />
                         <input type="text" name="photo" placeholder="URL de la photo" required className="w-full mb-2 p-2 border" />
-                        <input type="number" name="bookCount" placeholder="Nombre de livres" required className="w-full mb-2 p-2 border" />
-                        <input type="number" name="averageRating" step="0.1" placeholder="Note moyenne" required className="w-full mb-2 p-2 border" />
                         <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">Ajouter</button>
                     </form>
                 </div>
