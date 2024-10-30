@@ -1,3 +1,4 @@
+
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -8,22 +9,24 @@ import Modal from '@mui/material/Modal';
 const BookDetailPage = () => {
     const router = useRouter();
     const { id } = router.query;
-
     const [isDrawerOpen, setDrawerOpen] = useState(false);
     const [isModalOpen, setModalOpen] = useState(false);
 
-    // Supposons que nous ayons les données du livre et des avis sous forme de variable
-    const book = {
-        title: 'Titre du Livre',
-        price: 20,
-        publicationYear: 2023,
-        author: { name: 'Auteur Nom', id: 1 },
-    };
+    // Exemple de données
+    const books = [
+        { id: 1, title: 'Livre A', price: 20, publicationYear: 2021, author: { name: 'Auteur 1', id: 1 } },
+        { id: 2, title: 'Livre B', price: 25, publicationYear: 2020, author: { name: 'Auteur 2', id: 2 } },
+    ];
+
+    // Cherche le livre correspondant à l'ID
+    const book = books.find(book => book.id === Number(id));
 
     const reviews = [
         { id: 1, stars: 5, comment: 'Super livre !', date: '2023-10-01' },
         { id: 2, stars: 4, comment: 'Très intéressant', date: '2023-09-15' },
     ];
+
+    if (!book) return <p>Chargement...</p>; // Gérer le cas où le livre n'est pas trouvé
 
     return (
         <div className="container mx-auto p-4">
@@ -37,7 +40,6 @@ const BookDetailPage = () => {
                 </Link>
             </p>
 
-            {/* Bouton pour supprimer avec la modale de confirmation */}
             <Button color="error" onClick={() => setModalOpen(true)}>
                 Supprimer
             </Button>
@@ -55,7 +57,6 @@ const BookDetailPage = () => {
                 </div>
             </Modal>
 
-            {/* Drawer pour les avis */}
             <Button variant="outlined" onClick={() => setDrawerOpen(true)}>
                 Voir les avis
             </Button>

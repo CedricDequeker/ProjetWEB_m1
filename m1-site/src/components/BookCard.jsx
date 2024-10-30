@@ -1,11 +1,18 @@
 // src/components/BookCard.jsx
 
-const BookCard = ({ title, author }) => {
+"use client";
+import Link from 'next/link';
+
+const BookCard = ({ book }) => {
     return (
-        <div className="border rounded-lg shadow-md m-2 p-4 bg-white hover:shadow-lg transition">
-            <h2 className="text-xl font-semibold">{title}</h2>
-            <p className="text-gray-600">{author}</p>
-        </div>
+        <Link key={book.id} href={`/books/${book.id}`} className="block">
+            <div className="border p-4 rounded shadow-md">
+                <h2 className="font-bold">{book.title}</h2>
+                <p>Auteur : {book.author}</p>
+                <p>Date : {book.publicationYear}</p>
+                {/* Ajoute d'autres informations sur le livre si nécessaire */}
+            </div>
+        </Link>
     );
 };
 

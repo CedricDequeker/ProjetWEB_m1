@@ -1,37 +1,57 @@
-// src/app/books/page.jsx
 "use client";
 import { useState } from "react";
 import Layout from "../../components/Layout";
 import BookCard from "../../components/BookCard";
 import SearchBar from "../../components/SearchBar";
 import NewBookModal from "../../components/NewBookModal";
+import Link from 'next/link';
 
 const BooksPage = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [sortOrder, setSortOrder] = useState("title");
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [books, setBooks] = useState([]);
 
-    // Exemple de données statiques pour les livres
-    const books = [
-        { id: 1, title: "Livre A", date: "2021", author: "Auteur 1", rating: 4 },
-        { id: 2, title: "Livre B", date: "2020", author: "Auteur 2", rating: 3 },
-        // Ajoute d'autres livres ici...
-    ];
+    const fetchBooks = async () => {
+        const response = await fetch('http://127.0.0.1:3001/books');
+        if (!response.ok) throw new Error('Failed to fetch books');
+        return await response.json();
+    };
 
-    // Filtrage et tri des livres
+    const handleAddBook = async (newBookData) => {
+        try {
+            const response = await fetch('http://127.0.0.1:3001/books', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newBookData),
+            });
+
+            if (!response.ok) {
+                throw new Error('Erreur lors de l\'ajout du livre');
+            }
+
+            // Récupérer les livres après ajout
+            const updatedBooks = await fetchBooks();
+            setBooks(updatedBooks);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     const filteredBooks = books
         .filter(book => book.title.toLowerCase().includes(searchTerm.toLowerCase()))
         .sort((a, b) => {
             if (sortOrder === "title") return a.title.localeCompare(b.title);
-            if (sortOrder === "date") return a.date.localeCompare(b.date);
-            if (sortOrder === "author") return a.author.localeCompare(b.author);
+            if (sortOrder === "date") return a.publicationDate.localeCompare(b.publicationDate);
             return 0;
         });
 
     return (
         <Layout title="Liste des Livres">
             <div className="flex justify-between items-center mb-4">
-                <SearchBar value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+                <SearchBar value={searchTerm} onSearch={(value) => setSearchTerm(value)} />
                 <select
                     className="p-2 border rounded"
                     value={sortOrder}
@@ -48,11 +68,18 @@ const BooksPage = () => {
 
             <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
                 {filteredBooks.map(book => (
-                    <BookCard key={book.id} book={book} />
+                    <Link key={book.id} href={`/books/${book.id}`} className="block">
+                        <BookCard book={book} />
+                    </Link>
                 ))}
             </div>
 
-            {isModalOpen && <NewBookModal onClose={() => setIsModalOpen(false)} />}
+            {isModalOpen && (
+                <NewBookModal
+                    onClose={() => setIsModalOpen(false)} 
+                    onAddBook={handleAddBook} // Passer la fonction ici
+                />
+            )}
         </Layout>
     );
 };
