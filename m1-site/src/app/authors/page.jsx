@@ -40,6 +40,7 @@ const AuthorsPage = () => {
                     <AuthorCard
                         key={author.id}
                         name={author.name}
+                        id={author.id}
                         photo={author.photo}
                         bookCount={author.bookCount}
                         averageRating={author.averageRating}

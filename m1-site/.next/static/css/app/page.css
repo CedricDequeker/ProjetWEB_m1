@@ -520,6 +520,9 @@ video {
 .flex-grow {
   flex-grow: 1;
 }
+.cursor-pointer {
+  cursor: pointer;
+}
 .list-inside {
   list-style-position: inside;
 }

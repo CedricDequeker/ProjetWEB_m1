@@ -19,8 +19,18 @@ const AuthorDetailPage = () => {
     useEffect(() => {
         if (id) {
             // Fetch des données de l'auteur et de ses livres ici
-            // setAuthor(data.author);
-            // setBooks(data.books);
+            // Simuler des données pour l'exemple
+            setAuthor({
+                id,
+                name: "Auteur Exemple",
+                photoUrl: "/images/auteur.jpg",
+                biography: "Biographie de l'auteur..."
+            });
+            setBooks([
+                { id: 1, title: "Livre 1", publicationDate: "2021-01-01" },
+                { id: 2, title: "Livre 2", publicationDate: "2022-05-15" },
+                // Autres livres...
+            ]);
         }
     }, [id]);
 
@@ -31,6 +41,10 @@ const AuthorDetailPage = () => {
         // Logique de suppression de l'auteur avec confirmation
         closeModal();
     };
+
+    if (!id) {
+        return <p>Chargement...</p>; // Affiche un message pendant le chargement de `id`
+    }
 
     return (
         <div className="author-detail-page">
