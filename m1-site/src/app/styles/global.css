@@ -19,3 +19,76 @@ body {
 .button {
     @apply bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 transition;
 }
+
+
+.author-detail-page {
+    padding: 20px;
+    background-color: #f9f9f9; /* Couleur de fond douce */
+    border-radius: 8px; /* Coins arrondis */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Ombre légère */
+    max-width: 800px; /* Largeur maximale de la page */
+    margin: auto; /* Centrer la page */
+}
+
+.author-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px; /* Espacement sous l'en-tête */
+}
+
+.author-photo {
+    width: 150px; /* Largeur de l'image */
+    height: 150px; /* Hauteur de l'image */
+    border-radius: 50%; /* Forme circulaire */
+    margin-right: 20px; /* Espacement à droite de l'image */
+    object-fit: cover; /* Couvrir tout l'espace */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Ombre autour de l'image */
+}
+
+.author-header h1 {
+    font-size: 2em; /* Taille de police du nom de l'auteur */
+    margin: 0; /* Supprimer la marge par défaut */
+    color: #333; /* Couleur du texte */
+}
+
+.author-header p {
+    font-size: 1em; /* Taille de police de la biographie */
+    color: #666; /* Couleur du texte de la biographie */
+    margin-top: 5px; /* Espacement au-dessus de la biographie */
+}
+
+.books-list {
+    display: grid; /* Afficher en grille */
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Grille adaptable */
+    gap: 15px; /* Espacement entre les cartes de livres */
+}
+
+.books-list p {
+    grid-column: span 2; /* Occupation de toute la largeur si aucun livre trouvé */
+    text-align: center; /* Centrer le texte */
+    color: #999; /* Couleur du texte pour le message */
+}
+
+
+.book-card {
+    background-color: #fff; /* Couleur de fond blanche */
+    border: 1px solid #ddd; /* Bordure légère */
+    border-radius: 8px; /* Coins arrondis */
+    padding: 15px; /* Espacement interne */
+    transition: transform 0.2s; /* Effet de transition */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Ombre légère */
+}
+
+.book-card:hover {
+    transform: translateY(-5px); /* Léger soulèvement au survol */
+}
+
+.book-card h3 {
+    font-size: 1.2em; /* Taille de police du titre du livre */
+    margin: 0; /* Supprimer la marge par défaut */
+}
+
+.book-card p {
+    color: #555; /* Couleur du texte pour les détails */
+    margin-top: 5px; /* Espacement au-dessus du texte */
+}

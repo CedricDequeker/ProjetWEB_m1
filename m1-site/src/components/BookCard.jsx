@@ -4,6 +4,9 @@
 import Link from 'next/link';
 
 const BookCard = ({ book }) => {
+    if (!book) {
+        return <div>Chargement...</div>; // ou un message d'erreur
+    }
     return (
         <Link key={book.id} href={`/books/${book.id}`} className="block">
             <div className="border p-4 rounded shadow-md transition-transform duration-300 hover:scale-105 hover:shadow-lg">

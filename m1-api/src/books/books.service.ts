@@ -52,4 +52,7 @@ export class BooksService {
   async getReviewsForBook(bookId: number) {
     return await this.reviewsService.findAllByBook(bookId);
   }
+  async findByAuthorId(authorId: number): Promise<Book[]> {
+    return this.booksRepository.find({ where: { author: { id: authorId } } });
+}
 }

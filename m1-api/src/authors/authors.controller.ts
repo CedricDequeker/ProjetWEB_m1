@@ -1,14 +1,16 @@
 // src/authors/authors.controller.ts
-import { Controller, Post, Body, Get, Param } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param ,} from '@nestjs/common';
 import { AuthorsService } from './authors.service';
 import { CreateAuthorDto } from './authors.dto';
+import { BooksService } from '../books/books.service'; // Importez le service des livres
+import { Book } from '../modules/database/book.entity';
 
 @Controller('authors')
 export class AuthorsController {
-    constructor(private readonly authorsService: AuthorsService) {}
+    constructor(private readonly authorsService: AuthorsService,private readonly booksService: BooksService,) {}
 
     @Post()
-    create(@Body() createAuthorDto: CreateAuthorDto) {
+    create(@Body() createAuthorDto: CreateAuthorDto,) {
         return this.authorsService.create(createAuthorDto);
     }
 
@@ -20,5 +22,10 @@ export class AuthorsController {
     @Get(':id')
     findOne(@Param('id') id: string) {
     return this.authorsService.findOne(+id);
+    }
+
+    @Get(':id/books') // Cette route pour obtenir les livres d'un auteur
+    async findBooksByAuthor(@Param('id') id: string) {
+        return this.booksService.findByAuthorId(+id); // Implémentez cette méthode dans le BooksService
     }
 }

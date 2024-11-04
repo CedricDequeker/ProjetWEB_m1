@@ -1,8 +1,6 @@
-// src/app/authors/page.jsx
-
 "use client";
 
-import React,{ useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from '../../components/Layout';
 import Breadcrumb from '../../components/Breadcrumb';
 import SearchBar from '../../components/SearchBar';
@@ -11,13 +9,24 @@ import { Modal, Button } from '@mui/material';
 
 const AuthorsPage = () => {
     const breadcrumbPaths = ['Accueil', 'Liste des auteurs'];
-    const [authors, setAuthors] = useState([
-        { id: 1, name: "Auteur 1", photo: "/images/auteur1.jpg", bookCount: 3, averageRating: 4.2 },
-        { id: 2, name: "Auteur 2", photo: "/images/auteur2.jpg", bookCount: 5, averageRating: 3.8 },
-        // Autres auteurs...
-    ]);
+    const [authors, setAuthors] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    // Récupérer la liste des auteurs depuis l'API
+    useEffect(() => {
+        const fetchAuthors = async () => {
+            try {
+                const response = await fetch('http://127.0.0.1:3001/authors');
+                const data = await response.json();
+                setAuthors(data);
+            } catch (error) {
+                console.error("Erreur lors de la récupération des auteurs :", error);
+            }
+        };
+
+        fetchAuthors();
+    }, []);
 
     // Filtrer les auteurs par recherche
     const filteredAuthors = authors.filter(author =>
@@ -25,9 +34,19 @@ const AuthorsPage = () => {
     );
 
     // Fonction pour ajouter un nouvel auteur
-    const handleAddAuthor = (newAuthor) => {
-        setAuthors([...authors, newAuthor]);
-        setIsModalOpen(false);
+    const handleAddAuthor = async (newAuthor) => {
+        try {
+            const response = await fetch('http://127.0.0.1:3001/authors', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newAuthor),
+            });
+            const createdAuthor = await response.json();
+            setAuthors([...authors, createdAuthor]);
+            setIsModalOpen(false);
+        } catch (error) {
+            console.error("Erreur lors de l'ajout d'un auteur :", error);
+        }
     };
 
     return (
@@ -59,16 +78,15 @@ const AuthorsPage = () => {
                     <h2>Ajouter un auteur</h2>
                     <form onSubmit={(e) => {
                         e.preventDefault();
-                        // Exemple d'ajout de données pour un nouvel auteur
                         const newAuthor = {
-                            id: authors.length + 1,
                             name: e.target.name.value,
-                            photo: e.target.photo.value,
+                            biography: e.target.biography.value,
+                            // Ajoutez un champ pour la photo si nécessaire
                         };
                         handleAddAuthor(newAuthor);
                     }}>
                         <input type="text" name="name" placeholder="Nom" required className="w-full mb-2 p-2 border" />
-                        <input type="text" name="photo" placeholder="URL de la photo" required className="w-full mb-2 p-2 border" />
+                        <input type="text" name="biography" placeholder="Biographie" required className="w-full mb-2 p-2 border" />
                         <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">Ajouter</button>
                     </form>
                 </div>
