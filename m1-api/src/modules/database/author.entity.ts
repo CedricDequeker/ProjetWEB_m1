@@ -14,6 +14,9 @@ export class Author {
   @Column()
   biography: string;
 
+  @Column({ nullable: true }) // Champ optionnel
+  photoUrl: string; // Ajout de l'URL de la photo de l'auteur
+
   @OneToMany(() => Book, (book) => book.author)
   books: Book[];
 }

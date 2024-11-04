@@ -3,10 +3,12 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Author } from '../modules/database/author.entity';
-import { CreateAuthorDto } from './authors.dto';
+import { CreateAuthorDto, UpdateAuthorDto } from './authors.dto';
+
 
 @Injectable()
 export class AuthorsService {
+  private authors: Author[] = [];
   constructor(
     @InjectRepository(Author)
     private authorsRepository: Repository<Author>,
@@ -27,5 +29,18 @@ export class AuthorsService {
       throw new NotFoundException(`Auteur avec l'ID ${id} non trouvé`);
     }
     return author;
+  }
+
+  async update(id: number, updateAuthorDto: UpdateAuthorDto): Promise<Author> {
+    // Vérifie si l'auteur existe dans la base de données
+    const author = await this.authorsRepository.findOne({ where: { id } });
+    if (!author) {
+        throw new NotFoundException(`Auteur avec l'ID ${id} non trouvé`);
+    }
+
+    // Met à jour les propriétés de l'auteur
+    Object.assign(author, updateAuthorDto);
+    // Enregistre les modifications dans la base de données
+    return this.authorsRepository.save(author);
   }
 }

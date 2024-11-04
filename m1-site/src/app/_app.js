@@ -1,6 +1,6 @@
 // src/app/_app.js
 
-import '../styles/globals.css'; // Assurez-vous que ce chemin est correct
+import '../styles/global.css'; // Assurez-vous que ce chemin est correct
 
 function MyApp({ Component, pageProps }) {
   return <Component {...pageProps} />;
