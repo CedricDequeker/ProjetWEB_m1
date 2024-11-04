@@ -3,6 +3,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, BadRequestException } from '@nestjs/common';
 import { BooksService } from './books.service';
 import { CreateBookDto} from './book.dto';
+import { Book } from '../modules/database/book.entity';
 
 @Controller('books')
 export class BooksController {
@@ -14,7 +15,7 @@ export class BooksController {
   }
 
   @Get()
-  findAll() {
+  async findAll(): Promise<Book[]> {
     return this.booksService.findAll();
   }
 

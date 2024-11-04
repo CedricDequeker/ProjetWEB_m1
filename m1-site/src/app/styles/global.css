@@ -12,13 +12,46 @@ body {
 
 /* Styles pour le breadcrumb */
 .breadcrumb {
-    @apply text-gray-700;
+    display: flex; /* Utilise Flexbox pour un alignement horizontal */
+    align-items: center; /* Centre verticalement les éléments */
+    padding: 10px 15px; /* Ajoute un peu d'espace à l'intérieur du conteneur */
+    background-color: #f8f8f8; /* Couleur de fond légère */
+    border-radius: 4px; /* Coins arrondis */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ombre légère */
+    margin-bottom: 20px; /* Espace en dessous du breadcrumb */
 }
 
-/* Styles pour les boutons */
-.button {
-    @apply bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 transition;
+.breadcrumb a {
+    text-decoration: none; /* Supprime le soulignement des liens */
+    color: #007bff; /* Couleur des liens */
+    margin-right: 10px; /* Espace entre les éléments */
 }
+
+.breadcrumb a:hover {
+    text-decoration: underline; /* Ajoute un soulignement au survol */
+}
+
+.breadcrumb .separator {
+    margin: 0 5px; /* Espace autour du séparateur */
+    color: #6c757d; /* Couleur du séparateur */
+}
+
+/* Responsive: Ajuste le style sur les petits écrans */
+@media (max-width: 768px) {
+    .breadcrumb {
+        flex-direction: column; /* Passe à une colonne sur les petits écrans */
+    }
+
+    .breadcrumb a {
+        margin-bottom: 5px; /* Espace en bas des liens */
+    }
+
+    .breadcrumb a:last-child {
+        margin-bottom: 0; /* Pas d'espace en bas du dernier élément */
+    }
+}
+
+
 
 
 .author-detail-page {

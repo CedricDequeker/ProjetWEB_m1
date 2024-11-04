@@ -12,17 +12,6 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/authors/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/authors/page.css",
-      "static/chunks/app/authors/page.js"
-    ],
-    "/authors/[id]/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/authors/[id]/page.js"
-    ],
     "/books/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -33,6 +22,17 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/books/[id]/page.js"
+    ],
+    "/authors/[id]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/authors/[id]/page.js"
+    ],
+    "/authors/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/authors/page.css",
+      "static/chunks/app/authors/page.js"
     ]
   }
 }

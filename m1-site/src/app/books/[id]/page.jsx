@@ -19,6 +19,7 @@ const BookDetailPage = () => {
         const fetchBook = async () => {
             const response = await fetch(`http://127.0.0.1:3001/books/${id}`);
             const data = await response.json();
+            console.log(data);
             setBook(data);
             // Charger les avis du livre
             const reviewsResponse = await fetch(`http://127.0.0.1:3001/reviews/book/${id}`);
@@ -49,13 +50,29 @@ const BookDetailPage = () => {
         router.push('/books'); // Redirige vers la liste des livres
     };
 
-    if (!book) return <div className="text-center text-gray-500">Chargement...</div>;
+    if (!book)
+        return (
+          <div className="flex items-center justify-center h-screen text-gray-500">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-500"></div>
+            <p className="ml-4">Chargement...</p>
+          </div>
+        );
+      
 
     return (
         <div className="flex justify-center items-center min-h-screen bg-gray-100">
             <div className="bg-white shadow-lg rounded-lg p-6 max-w-lg w-full">
                 <h1 className="text-3xl font-bold mb-4 text-blue-600">{book.title}</h1>
-                <p className="text-lg text-gray-700 mb-2"><span className="font-semibold">Auteur :</span> {book.author ? book.author.name : "Non renseigné"}</p>
+                <p className="text-lg text-gray-700 mb-2">
+                <span className="font-semibold">Auteur :</span>{" "}
+                    {book.author ? (
+                        <Link href={`/authors/${book.author.id}`} className="text-blue-500 hover:text-blue-700">
+                            {book.author.name}
+                        </Link>
+                    ) : (
+                        "Non renseigné"
+                    )}
+                </p>
                 <p className="text-lg text-gray-700 mb-2"><span className="font-semibold">Date de publication :</span> {book.publicationDate}</p>
                 <p className="text-lg text-gray-700 mb-4"><span className="font-semibold">Prix :</span> {book.price} €</p>
                 

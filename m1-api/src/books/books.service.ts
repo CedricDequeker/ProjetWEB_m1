@@ -34,10 +34,6 @@ export class BooksService {
       return this.booksRepository.save(book);
     }
 
-    findAll() {
-    return this.booksRepository.find({ relations: ['author'] });
-  }
-
     findOne(id: number) {
     return this.booksRepository.findOne({ where: { id }, relations: ['author'] });
   }
@@ -54,5 +50,10 @@ export class BooksService {
   }
   async findByAuthorId(authorId: number): Promise<Book[]> {
     return this.booksRepository.find({ where: { author: { id: authorId } } });
+}
+async findAll(): Promise<Book[]> {
+  return this.booksRepository.find({ 
+    relations: ['author'], // Ajoutez cette ligne pour inclure l'auteur
+  });
 }
 }

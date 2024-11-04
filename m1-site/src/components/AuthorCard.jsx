@@ -1,19 +1,28 @@
-// src/components/AuthorCard.jsx
+import React from 'react';
+import { useRouter } from 'next/navigation';
 
-import Link from 'next/link';
+const AuthorCard = ({ id, name, photo, bookCount, averageRating }) => {
+    const router = useRouter();
 
-const AuthorCard = ({ id, name, photo, bookCount, averageRating }) => {  // Ajoutez `id` ici
     return (
-        <Link href={`/authors/${id}`}>
-            <div className="bg-white shadow-md rounded-lg p-4 flex items-center space-x-4 cursor-pointer">
-                <img src={photo} alt={`Photo de ${name}`} className="w-16 h-16 rounded-full object-cover" />
-                <div>
-                    <h3 className="text-lg font-semibold">{name}</h3>
-                    <p>Nombre de livres : {bookCount}</p>
-                    <p>Note moyenne : {averageRating}⭐</p>
-                </div>
+        <div className="flex flex-col items-center p-4 border rounded-lg shadow hover:shadow-md transition min-h-[200px] min-w-[250px]">
+            {photo ? (
+                <img src={photo} alt={`${name} photo`} className="w-24 h-24 rounded-full mb-2" />
+            ) : (
+                <div className="w-16 h-16 rounded-full bg-gray-300 flex items-center justify-center text-gray-700">Pas de photo</div>
+            )}
+            <div className="ml-4 flex-grow">
+                <h3 className="text-lg font-bold">{name}</h3>
+                <p className="text-gray-600">Livres écrits: {bookCount}</p>
+                <p className="text-gray-600">Note moyenne: {typeof averageRating === 'number' ? averageRating.toFixed(1) : 'N/A'}</p>
             </div>
-        </Link>
+            <button
+                onClick={() => router.push(`/authors/${id}`)}
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-200"
+            >
+                Voir Détails
+            </button>
+        </div>
     );
 };
 

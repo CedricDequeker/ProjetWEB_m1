@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Author } from '../modules/database/author.entity';
 import { CreateAuthorDto, UpdateAuthorDto } from './authors.dto';
+import { Book } from '../modules/database/book.entity';
 
 
 @Injectable()
@@ -42,5 +43,9 @@ export class AuthorsService {
     Object.assign(author, updateAuthorDto);
     // Enregistre les modifications dans la base de données
     return this.authorsRepository.save(author);
+  }
+  
+  async findAllAuthors(): Promise<Author[]> {
+    return await this.authorsRepository.find({ relations: ['books'] });
   }
 }
