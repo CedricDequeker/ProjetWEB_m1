@@ -41,6 +41,11 @@ export class AuthorsController {
 
     @Get()
     async findAllAuthors() {
-    return this.authorRepository.find({ relations: ['books'] });
+        return await this.authorRepository.find({ relations: ['books'] });
+    }
+    
+    @Get()
+    async getAllAuthors(): Promise<Author[]> {
+        return await this.authorsService.findAll();
     }
 }

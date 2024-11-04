@@ -96,7 +96,7 @@ const AuthorDetailPage = () => {
                     <Button variant="outlined" color="error" onClick={() => setDeleteModalOpen(true)} className="mt-2">
                         Supprimer l'auteur
                     </Button>
-                    <Link href="/authors" className="text-blue-500 hover:text-blue-700 mt-4 block">Retour à la liste des livres</Link>
+                    <Link href="/authors" className="text-blue-500 hover:text-blue-700 mt-4 block">Retour à la liste des auteurs</Link>
                 </div>
 
                 {isEditing && (
