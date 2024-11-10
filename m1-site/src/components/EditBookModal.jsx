@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Modal } from '@mui/material';
 
-const EditBookModal = ({ isOpen, onClose, book, onAddBook }) => {
-    const [title, setTitle] = useState(book?.title || ''); // Initialise avec le titre du livre ou une chaîne vide
+const EditBookModal = ({ isOpen, onClose, book, onEditBook }) => {
+    const [title, setTitle] = useState(book?.title || '');
     const [publicationDate, setPublicationDate] = useState(book?.publicationDate || '');
     const [price, setPrice] = useState(book?.price || '');
     const [authorId, setAuthorId] = useState(book?.authorId || '');
@@ -22,8 +22,8 @@ const EditBookModal = ({ isOpen, onClose, book, onAddBook }) => {
         fetchAuthors();
     }, []);
 
-    // Réinitialise les valeurs de titre, publicationDate, etc., chaque fois que le livre change
     useEffect(() => {
+        // Si le livre change, mettez à jour les champs d'édition
         setTitle(book?.title || '');
         setPublicationDate(book?.publicationDate || '');
         setPrice(book?.price || '');
@@ -38,8 +38,9 @@ const EditBookModal = ({ isOpen, onClose, book, onAddBook }) => {
             authorId: parseInt(authorId),
         };
 
-        await onAddBook(editBookData); // Appelle la fonction de mise à jour du parent
-        onClose(); // Ferme la modale après l'enregistrement
+        // Appeler onEditBook pour envoyer les nouvelles données
+        await onEditBook(editBookData); // Appel de la fonction de la page parente
+        onClose(); // Fermer la modal après l'édition
     };
 
     return (
@@ -47,6 +48,7 @@ const EditBookModal = ({ isOpen, onClose, book, onAddBook }) => {
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                 <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
                     <h2 className="text-xl font-bold mb-4">Modifier le Livre</h2>
+                    {/* Champs de formulaire pour les données du livre */}
                     <input 
                         type="text" 
                         placeholder="Titre" 

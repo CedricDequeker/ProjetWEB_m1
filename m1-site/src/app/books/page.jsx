@@ -46,6 +46,7 @@ const BooksPage = () => {
             // Récupérer les livres après ajout
             const updatedBooks = await fetchBooks();
             setBooks(updatedBooks);
+            
         } catch (error) {
             console.error(error);
         }
@@ -89,7 +90,7 @@ const BooksPage = () => {
             {isModalOpen && (
                 <NewBookModal
                     onClose={() => setIsModalOpen(false)} 
-                    onAddBook={handleAddBook} // Passer la fonction ici
+                    onAddBook={handleAddBook}
                 />
             )}
         </Layout>

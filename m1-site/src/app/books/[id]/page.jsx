@@ -22,9 +22,36 @@ const BookDetailPage = () => {
             const response = await fetch(`http://127.0.0.1:3001/books/${id}`);
             const data = await response.json();
             setBook(data);
+
+            // Initialiser les champs d'édition
+            setTitle(data.title);
+            setPublicationDate(data.publicationDate);
+            setPrice(data.price);
+            setAuthorId(data.author?.id);
+
+            // Charger les avis du livre
+            const reviewsResponse = await fetch(`http://127.0.0.1:3001/reviews/book/${id}`);
+            const reviewsData = await reviewsResponse.json();
+            setReviews(reviewsData);
+
         };
         fetchBook();
     }, [id]);
+
+    // Charger les avis lorsque le livre est récupéré
+    useEffect(() => {
+        const fetchReviews = async () => {
+            const response = await fetch(`http://127.0.0.1:3001/books/${id}/reviews`);
+            const data = await response.json();
+            setReviews(data);
+            };
+
+            if (book) {
+                fetchReviews();
+
+        }
+    }, [book, id]); // Dépend des changements de `book` et `id`
+
 
     const handleDeleteBook = async () => {
         await fetch(`http://127.0.0.1:3001/books/${id}`, {
@@ -34,22 +61,24 @@ const BookDetailPage = () => {
         router.push('/books');
     };
 
-    const handleEditBook = async () => {
-        const editBookData = {
-            title,
-            publicationDate,
-            price: parseFloat(price),
-            authorId: parseInt(authorId),
-        };
-        
-        await fetch(`http://127.0.0.1:3001/books/${book.id}`, {
+    const handleEditBook = async (editBookData) => {
+        const response = await fetch(`http://127.0.0.1:3001/books/${id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(editBookData),
         });
-        onClose(); // Ferme la modale après envoi
+    
+        if (!response.ok) {
+            console.error("Erreur lors de la mise à jour du livre");
+            return;
+        }
+    
+        // Met à jour localement les données du livre après la modification
+        const updatedBook = await response.json();
+        setBook(updatedBook); 
+        router.push(`/books/${id}`); 
     };
 
     if (!book) {
@@ -105,15 +134,17 @@ const BookDetailPage = () => {
                 <EditBookModal
                     isOpen={isEditModalOpen}
                     onClose={() => setEditModalOpen(false)}
-                    onAddBook={handleEditBook} // Fonction pour enregistrer les modifications
+                    book={book} 
+                    onEditBook={handleEditBook} 
                 />
 
                 <Button variant="outlined" color="primary" onClick={() => setDrawerOpen(true)}>
                     Voir les avis
                 </Button>
+
                 <Link href="/books" className="text-blue-500 hover:text-blue-700 mt-4 block">Retour à la liste des livres</Link>
             </div>
-
+            {/* Drawer pour afficher les avis */}
             <Drawer anchor="right" open={isDrawerOpen} onClose={() => setDrawerOpen(false)}>
                 <div className="w-80 p-4">
                     <div className="flex justify-between items-center">
