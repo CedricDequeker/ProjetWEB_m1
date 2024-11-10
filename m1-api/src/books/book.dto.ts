@@ -15,12 +15,16 @@ export class CreateBookDto {
 }
 
 export class UpdateBookDto {
+    @IsOptional()
     @IsString()
     title: string;
+    @IsOptional()
     @IsString()
     publicationDate: string;
+    @IsOptional()
     @IsNumber()
     price: number;
+    @IsOptional()
     @IsNumber()
     authorId: number;
 }

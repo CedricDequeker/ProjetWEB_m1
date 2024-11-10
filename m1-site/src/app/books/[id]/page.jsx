@@ -6,65 +6,67 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Drawer, Button, IconButton, Modal, Rating } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import EditBookModal from '../../../components/EditBookModal';
 
 const BookDetailPage = () => {
     const { id } = useParams();
     const router = useRouter();
     const [book, setBook] = useState(null);
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
-    const [isDrawerOpen, setDrawerOpen] = useState(false); // Contrôle l'état du drawer
-    const [reviews, setReviews] = useState([]); // Pour stocker les avis
+    const [isEditModalOpen, setEditModalOpen] = useState(false);
+    const [isDrawerOpen, setDrawerOpen] = useState(false);
+    const [reviews, setReviews] = useState([]);
 
     useEffect(() => {
         const fetchBook = async () => {
             const response = await fetch(`http://127.0.0.1:3001/books/${id}`);
             const data = await response.json();
-            console.log(data);
             setBook(data);
-            // Charger les avis du livre
-            const reviewsResponse = await fetch(`http://127.0.0.1:3001/reviews/book/${id}`);
-            const reviewsData = await reviewsResponse.json();
-            setReviews(reviewsData);
         };
         fetchBook();
     }, [id]);
-
-    // Charger les avis lorsque le livre est récupéré
-    useEffect(() => {
-        const fetchReviews = async () => {
-            const response = await fetch(`http://127.0.0.1:3001/books/${id}/reviews`);
-            const data = await response.json();
-            setReviews(data);
-        };
-
-        if (book) {
-            fetchReviews();
-        }
-    }, [book, id]); // Dépend des changements de `book` et `id`
 
     const handleDeleteBook = async () => {
         await fetch(`http://127.0.0.1:3001/books/${id}`, {
             method: 'DELETE',
         });
         setDeleteModalOpen(false);
-        router.push('/books'); // Redirige vers la liste des livres
+        router.push('/books');
     };
 
-    if (!book)
+    const handleEditBook = async () => {
+        const editBookData = {
+            title,
+            publicationDate,
+            price: parseFloat(price),
+            authorId: parseInt(authorId),
+        };
+        
+        await fetch(`http://127.0.0.1:3001/books/${book.id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(editBookData),
+        });
+        onClose(); // Ferme la modale après envoi
+    };
+
+    if (!book) {
         return (
           <div className="flex items-center justify-center h-screen text-gray-500">
             <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-500"></div>
             <p className="ml-4">Chargement...</p>
           </div>
         );
-      
+    }
 
     return (
         <div className="flex justify-center items-center min-h-screen bg-gray-100">
             <div className="bg-white shadow-lg rounded-lg p-6 max-w-lg w-full">
                 <h1 className="text-3xl font-bold mb-4 text-blue-600">{book.title}</h1>
                 <p className="text-lg text-gray-700 mb-2">
-                <span className="font-semibold">Auteur :</span>{" "}
+                    <span className="font-semibold">Auteur :</span>{" "}
                     {book.author ? (
                         <Link href={`/authors/${book.author.id}`} className="text-blue-500 hover:text-blue-700">
                             {book.author.name}
@@ -75,8 +77,11 @@ const BookDetailPage = () => {
                 </p>
                 <p className="text-lg text-gray-700 mb-2"><span className="font-semibold">Date de publication :</span> {book.publicationDate}</p>
                 <p className="text-lg text-gray-700 mb-4"><span className="font-semibold">Prix :</span> {book.price} €</p>
-                
-                {/* Bouton de suppression avec modale de confirmation */}
+
+                <Button variant="outlined" color="primary" onClick={() => setEditModalOpen(true)} style={{ marginRight: '10px' }}>
+                    Modifier le livre
+                </Button>
+
                 <Button variant="outlined" color="error" onClick={() => setDeleteModalOpen(true)}>
                     Supprimer le livre
                 </Button>
@@ -97,13 +102,18 @@ const BookDetailPage = () => {
                     </div>
                 </Modal>
 
+                <EditBookModal
+                    isOpen={isEditModalOpen}
+                    onClose={() => setEditModalOpen(false)}
+                    onAddBook={handleEditBook} // Fonction pour enregistrer les modifications
+                />
+
                 <Button variant="outlined" color="primary" onClick={() => setDrawerOpen(true)}>
                     Voir les avis
                 </Button>
                 <Link href="/books" className="text-blue-500 hover:text-blue-700 mt-4 block">Retour à la liste des livres</Link>
             </div>
-            
-            {/* Drawer pour les avis */}
+
             <Drawer anchor="right" open={isDrawerOpen} onClose={() => setDrawerOpen(false)}>
                 <div className="w-80 p-4">
                     <div className="flex justify-between items-center">
