@@ -81,9 +81,7 @@ const BooksPage = () => {
 
             <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                 {filteredBooks.map(book => (
-                    <Link key={book.id} href={`/books/${book.id}`} className="block">
-                        <BookCard book={book} />
-                    </Link>
+                    <BookCard key={book.id} book={book} />
                 ))}
             </div>
 
