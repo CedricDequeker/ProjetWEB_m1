@@ -20,9 +20,9 @@ export class AuthorsService {
     return this.authorsRepository.save(newAuthor);
   }
 
-  //findAll() {
-    //return this.authorsRepository.find();
-  //}
+  async remove(id: number) {
+    return await this.authorsRepository.delete(id);
+  }
   
   async findAll(): Promise<Author[]> {
     const authors = await this.authorsRepository.find({

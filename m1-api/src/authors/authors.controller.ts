@@ -1,5 +1,5 @@
 // src/authors/authors.controller.ts
-import { Controller, Post,Put, Body, Get, Param ,Inject} from '@nestjs/common';
+import { Controller, Post,Put, Body, Get, Param ,Delete} from '@nestjs/common';
 import { AuthorsService } from './authors.service';
 import { CreateAuthorDto, UpdateAuthorDto } from './authors.dto';
 import { BooksService } from '../books/books.service'; // Importez le service des livres
@@ -47,5 +47,10 @@ export class AuthorsController {
     @Get()
     async getAllAuthors(): Promise<Author[]> {
         return await this.authorsService.findAll();
+    }
+
+    @Delete(':id')
+    remove(@Param('id') id: string) {
+        return this.authorsService.remove(+id);
     }
 }

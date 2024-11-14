@@ -1,13 +1,16 @@
 import { useState, useEffect } from 'react';
 import { Modal } from '@mui/material';
 
+// Composant EditBookModal pour l'édition des informations d'un livre
 const EditBookModal = ({ isOpen, onClose, book, onEditBook }) => {
+    // États pour gérer les champs de formulaire
     const [title, setTitle] = useState(book?.title || '');
     const [publicationDate, setPublicationDate] = useState(book?.publicationDate || '');
     const [price, setPrice] = useState(book?.price || '');
     const [authorId, setAuthorId] = useState(book?.authorId || '');
-    const [authors, setAuthors] = useState([]);
+    const [authors, setAuthors] = useState([]); // Liste des auteurs disponibles
 
+    // useEffect pour récupérer la liste des auteurs disponibles
     useEffect(() => {
         const fetchAuthors = async () => {
             try {
@@ -22,33 +25,35 @@ const EditBookModal = ({ isOpen, onClose, book, onEditBook }) => {
         fetchAuthors();
     }, []);
 
+    // Mise à jour des champs lorsque le livre sélectionné change
     useEffect(() => {
-        // Si le livre change, mettez à jour les champs d'édition
         setTitle(book?.title || '');
         setPublicationDate(book?.publicationDate || '');
         setPrice(book?.price || '');
         setAuthorId(book?.authorId || '');
     }, [book]);
 
+    // Fonction pour gérer la soumission du formulaire de modification
     const handleEditBook = async () => {
         const editBookData = {
             title,
             publicationDate,
-            price: parseFloat(price),
-            authorId: parseInt(authorId),
+            price: parseFloat(price), // Conversion en nombre flottant
+            authorId: parseInt(authorId), // Conversion en entier
         };
 
-        // Appeler onEditBook pour envoyer les nouvelles données
-        await onEditBook(editBookData); // Appel de la fonction de la page parente
-        onClose(); // Fermer la modal après l'édition
+        await onEditBook(editBookData); // Envoie les nouvelles données au parent
+        onClose(); // Ferme la modale
     };
 
     return (
         <Modal open={isOpen} onClose={onClose}>
+            {/* Fond semi-transparent et centrage de la modale */}
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                 <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
                     <h2 className="text-xl font-bold mb-4">Modifier le Livre</h2>
-                    {/* Champs de formulaire pour les données du livre */}
+                    
+                    {/* Champ de titre */}
                     <input 
                         type="text" 
                         placeholder="Titre" 
@@ -56,6 +61,8 @@ const EditBookModal = ({ isOpen, onClose, book, onEditBook }) => {
                         onChange={(e) => setTitle(e.target.value)} 
                         className="w-full p-2 border rounded mb-4"
                     />
+
+                    {/* Champ de date de publication */}
                     <input 
                         type="date" 
                         placeholder="Date de publication" 
@@ -63,6 +70,8 @@ const EditBookModal = ({ isOpen, onClose, book, onEditBook }) => {
                         onChange={(e) => setPublicationDate(e.target.value)} 
                         className="w-full p-2 border rounded mb-4"
                     />
+
+                    {/* Champ de prix */}
                     <input 
                         type="number" 
                         placeholder="Prix" 
@@ -70,6 +79,8 @@ const EditBookModal = ({ isOpen, onClose, book, onEditBook }) => {
                         onChange={(e) => setPrice(e.target.value)} 
                         className="w-full p-2 border rounded mb-4"
                     />
+
+                    {/* Sélecteur d'auteur */}
                     <select 
                         value={authorId} 
                         onChange={(e) => setAuthorId(e.target.value)} 
@@ -82,6 +93,8 @@ const EditBookModal = ({ isOpen, onClose, book, onEditBook }) => {
                             </option>
                         ))}
                     </select>
+
+                    {/* Boutons Enregistrer et Fermer */}
                     <div className="flex justify-between">
                         <button 
                             onClick={handleEditBook} 
