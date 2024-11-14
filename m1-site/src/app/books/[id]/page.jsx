@@ -1,5 +1,3 @@
-// src/app/books/[id]/page.jsx
-
 "use client";
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
@@ -17,48 +15,52 @@ const BookDetailPage = () => {
     const [isDrawerOpen, setDrawerOpen] = useState(false);
     const [reviews, setReviews] = useState([]);
 
+    const [newComment, setNewComment] = useState(''); // état pour le commentaire
+    const [rating, setRating] = useState(0);          // état pour la note
+    const [error, setError] = useState('');           // état pour les erreurs
+
     useEffect(() => {
         const fetchBook = async () => {
             const response = await fetch(`http://127.0.0.1:3001/books/${id}`);
             const data = await response.json();
             setBook(data);
 
-            // Initialiser les champs d'édition
-            setTitle(data.title);
-            setPublicationDate(data.publicationDate);
-            setPrice(data.price);
-            setAuthorId(data.author?.id);
-
-            // Charger les avis du livre
             const reviewsResponse = await fetch(`http://127.0.0.1:3001/reviews/book/${id}`);
             const reviewsData = await reviewsResponse.json();
             setReviews(reviewsData);
-
         };
         fetchBook();
     }, [id]);
 
-    // Charger les avis lorsque le livre est récupéré
-    useEffect(() => {
-        const fetchReviews = async () => {
-            const response = await fetch(`http://127.0.0.1:3001/books/${id}/reviews`);
-            const data = await response.json();
-            setReviews(data);
-            };
-
-            if (book) {
-                fetchReviews();
-
-        }
-    }, [book, id]); // Dépend des changements de `book` et `id`
-
-
     const handleDeleteBook = async () => {
-        await fetch(`http://127.0.0.1:3001/books/${id}`, {
-            method: 'DELETE',
-        });
+        await fetch(`http://127.0.0.1:3001/books/${id}`, { method: 'DELETE' });
         setDeleteModalOpen(false);
         router.push('/books');
+    };
+
+    const handleAddComment = async () => {
+        try {
+            const response = await fetch(`http://127.0.0.1:3001/reviews/book/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ comment: newComment, rating }),
+            });
+
+            if (response.ok) {
+                const addedReview = await response.json();
+                setReviews([...reviews, addedReview]);
+                setNewComment(''); 
+                setRating(0);      
+            } else {
+                const errorData = await response.json();
+                setError(errorData.message || 'Une erreur est survenue.');
+            }
+        } catch (error) {
+            console.error(`Erreur lors de l'ajout du commentaire :`, error);
+            setError('Une erreur est survenue.');
+        }
     };
 
     const handleEditBook = async (editBookData) => {
@@ -75,7 +77,6 @@ const BookDetailPage = () => {
             return;
         }
     
-        // Met à jour localement les données du livre après la modification
         const updatedBook = await response.json();
         setBook(updatedBook); 
         router.push(`/books/${id}`); 
@@ -144,7 +145,7 @@ const BookDetailPage = () => {
 
                 <Link href="/books" className="text-blue-500 hover:text-blue-700 mt-4 block">Retour à la liste des livres</Link>
             </div>
-            {/* Drawer pour afficher les avis */}
+            {/* Drawer pour afficher les avis et ajouter un commentaire */}
             <Drawer anchor="right" open={isDrawerOpen} onClose={() => setDrawerOpen(false)}>
                 <div className="w-80 p-4">
                     <div className="flex justify-between items-center">
@@ -168,6 +169,29 @@ const BookDetailPage = () => {
                     ) : (
                         <p className="text-gray-500">Aucun avis pour ce livre.</p>
                     )}
+                    {/* Formulaire d'ajout de commentaire */}
+                    <div className="mt-4">
+                        <h3 className="text-lg font-semibold mb-2">Ajouter un commentaire</h3>
+                        <textarea
+                            value={newComment}
+                            onChange={(e) => setNewComment(e.target.value)}
+                            placeholder="Écrivez votre commentaire ici..."
+                            className="w-full p-2 border rounded mb-2"
+                        />
+                        <div className="mb-2">
+                            <Rating
+                                value={rating}
+                                onChange={(e, newValue) => setRating(newValue)}
+                            />
+                        </div>
+                        {error && <p className="text-red-500 text-sm">{error}</p>}
+                        <button
+                            onClick={handleAddComment}
+                            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                        >
+                            Publier
+                        </button>
+                    </div>
                 </div>
             </Drawer>
         </div>
